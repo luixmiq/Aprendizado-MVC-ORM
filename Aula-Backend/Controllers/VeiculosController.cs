@@ -1,0 +1,72 @@
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Aula_Backend.Models;
+using System.Runtime.CompilerServices;
+
+namespace Aula_Backend.Controllers
+{
+    public class VeiculosController : Controller
+    {
+        private readonly AppDbContext _context;
+
+        public VeiculosController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()  
+        {
+            var dados = await _context.Veiculos.ToListAsync();
+
+            return View(dados);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Veiculo veiculo)
+        {
+            if(ModelState.IsValid)
+            {
+                _context.Veiculos.Add(veiculo);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(veiculo);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var dados = await _context.Veiculos.FindAsync(id);
+
+            if (dados == null)
+                return NotFound();
+
+            return View(dados);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Veiculo veiculo, int? id)
+        {
+            if (id != veiculo.Id)
+                return NotFound();
+
+            if(ModelState.IsValid)
+            {
+                _context.Veiculos.Update(veiculo);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            return View(veiculo);
+        }
+    }
+}
