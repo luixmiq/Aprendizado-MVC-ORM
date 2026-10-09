@@ -1,12 +1,11 @@
 @model Aula_Backend.Models.Consumo
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Cadastrar Consumo";
 }
 
-<h1>Create</h1>
+<h1>Cadastrar Consumo</h1>
 
-<h4>Consumo</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,25 +38,25 @@
 
             <div class="form-group">
                 <label asp-for="Combustivel" class="control-label"></label>
-                <input asp-for="Combustivel" class="form-control" />
+                <select asp-for="Combustivel" class="form-control" asp-items="@(ViewData["Combustivel"] as SelectList)">
+                    <option value="">-- Selecione --</option>
+                </select>
                 <span asp-validation-for="Combustivel" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="VeiculoId" class="control-label"></label>
-                <select asp-for="VeiculoId" class="form-control" asp-items='ViewData["VeiculoId"] as SelectList'>
+                <select asp-for="VeiculoId" class="form-control" asp-items="@(ViewData["VeiculoId"] as SelectList)">
                     <option value="">-- Selecione --</option>
                 </select>
                 <span asp-validation-for="VeiculoId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-info">Voltar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

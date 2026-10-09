@@ -1,10 +1,10 @@
 @model Aula_Backend.Models.Consumo
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Consumo";
 }
 
-<h1>Edit</h1>
+<h1>Editar Consumo</h1>
 
 <h4>Consumo</h4>
 <hr />
@@ -13,50 +13,52 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
                 <input asp-for="Descricao" class="form-control" />
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Data" class="control-label"></label>
                 <input asp-for="Data" class="form-control" />
                 <span asp-validation-for="Data" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Valor" class="control-label"></label>
-                <input asp-for="Valor" class="form-control" />
+                <input class="form-control" value="@Model.Valor" data-val="true" data-val-required="&#xC9; obrigat&#xF3;rio informar o valor" id="Valor" name="Valor" />
                 <span asp-validation-for="Valor" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Km" class="control-label"></label>
                 <input asp-for="Km" class="form-control" />
                 <span asp-validation-for="Km" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Combustivel" class="control-label"></label>
-                <input asp-for="Combustivel" class="form-control" />
+                <select asp-for="Combustivel" class="form-control" asp-items="@(ViewData["Combustivel"] as SelectList)">
+                    <option value="">-- Selecione --</option>
+                </select>
                 <span asp-validation-for="Combustivel" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="VeiculoId" class="control-label"></label>
-                <input asp-for="VeiculoId" class="form-control" />
+                <select asp-for="VeiculoId" class="form-control" asp-items="@(ViewData["VeiculoId"] as SelectList)">
+                    <option value="">-- Selecione --</option>
+                </select>
                 <span asp-validation-for="VeiculoId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Veiculo" class="control-label"></label>
-                <input asp-for="Veiculo" class="form-control" />
-                <span asp-validation-for="Veiculo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-info">Voltar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

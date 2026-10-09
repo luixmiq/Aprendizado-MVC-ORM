@@ -1,4 +1,6 @@
 
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +19,31 @@ namespace Aula_Backend.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Consumos.ToListAsync());
+            var consumos = await _context.Consumos.Include(c => c.Veiculo).ToListAsync();
+
+            return View(consumos);
+        }
+
+        public IActionResult Create()
+        {
+        ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome");
+        ViewData["Combustivel"] = new SelectList(Enum.GetValues(typeof(TipoCombustivel)).Cast<TipoCombustivel>().Select(e => new { Value = (int)e, Text = e.ToString() }), "Value", "Text");
+        return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Descricao,Data,Valor,Km,Combustivel,VeiculoId,Veiculo")] Consumo consumo)
+        {
+        if (ModelState.IsValid)
+            {
+                _context.Add(consumo);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+        ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome", consumo.VeiculoId);
+        ViewData["Combustivel"] = new SelectList(Enum.GetValues(typeof(TipoCombustivel)).Cast<TipoCombustivel>().Select(e => new { Value = (int)e, Text = e.ToString() }), "Value", "Text", (int)consumo.Combustivel);
+        return View(consumo);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -27,34 +53,12 @@ namespace Aula_Backend.Controllers
                 return NotFound();
             }
 
-            var consumo = await _context.Consumos
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var consumo = await _context.Consumos.Include(c => c.Veiculo).FirstOrDefaultAsync(m => m.Id == id);
             if (consumo == null)
             {
                 return NotFound();
             }
 
-            return View(consumo);
-        }
-
-        // GET: CONSUMOS/Create
-        public IActionResult Create()
-        {
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome");
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descricao,Data,Valor,Km,Combustivel,VeiculoId,Veiculo")] Consumo consumo)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(consumo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome", consumo.VeiculoId);
             return View(consumo);
         }
 
@@ -71,8 +75,9 @@ namespace Aula_Backend.Controllers
                 return NotFound();
             }
 
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome", consumo.VeiculoId);
-            return View(consumo);
+        ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome", consumo.VeiculoId);
+        ViewData["Combustivel"] = new SelectList(Enum.GetValues(typeof(TipoCombustivel)).Cast<TipoCombustivel>().Select(e => new { Value = (int)e, Text = e.ToString() }), "Value", "Text", (int)consumo.Combustivel);
+        return View(consumo);
         }
 
         [HttpPost]
@@ -115,8 +120,7 @@ namespace Aula_Backend.Controllers
                 return NotFound();
             }
 
-            var consumo = await _context.Consumos
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var consumo = await _context.Consumos.Include(c => c.Veiculo).FirstOrDefaultAsync(m => m.Id == id);
             if (consumo == null)
             {
                 return NotFound();

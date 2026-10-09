@@ -1,13 +1,13 @@
 @model IEnumerable<Aula_Backend.Models.Consumo>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Consumos";
 }
 
-<h1>Index</h1>
+<h1>Consumos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Adicionar Novo Consumo</a>
 </p>
 <table class="table">
     <thead>
@@ -30,9 +30,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.VeiculoId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Veiculo)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -55,15 +53,12 @@
                 @Html.DisplayFor(model => item.Combustivel)
             </td>
             <td>
-                @Html.DisplayFor(model => item.VeiculoId)
+                @Html.DisplayFor(model => item.Veiculo.Nome)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Veiculo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a> 
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Visualizar</a> 
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Apagar</a>
             </td>
         </tr>
 }
