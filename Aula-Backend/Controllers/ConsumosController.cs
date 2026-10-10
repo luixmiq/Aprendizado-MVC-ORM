@@ -41,6 +41,7 @@ namespace Aula_Backend.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
         ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Nome", consumo.VeiculoId);
         ViewData["Combustivel"] = new SelectList(Enum.GetValues(typeof(TipoCombustivel)).Cast<TipoCombustivel>().Select(e => new { Value = (int)e, Text = e.ToString() }), "Value", "Text", (int)consumo.Combustivel);
         return View(consumo);
