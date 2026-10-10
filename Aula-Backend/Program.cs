@@ -1,5 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using Aula_Backend.Models;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,5 +33,8 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+var supported = new[] { new CultureInfo("pt-BR") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{ DefaultRequestCulture = new RequestCulture("pt-BR"), SupportedCultures = supported, SupportedUICultures = supported });
 
 app.Run();

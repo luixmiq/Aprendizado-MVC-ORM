@@ -15,7 +15,7 @@ namespace Aula_Backend.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()  
+        public async Task<IActionResult> Index()
         {
             var dados = await _context.Veiculos.ToListAsync();
 
@@ -30,7 +30,7 @@ namespace Aula_Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Veiculo veiculo)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Veiculos.Add(veiculo);
                 await _context.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace Aula_Backend.Controllers
             if (id != veiculo.Id)
                 return NotFound();
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Veiculos.Update(veiculo);
                 await _context.SaveChangesAsync();
@@ -103,7 +103,7 @@ namespace Aula_Backend.Controllers
 
             var dados = await _context.Veiculos.FindAsync(id);
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Veiculos.Remove(dados);
                 await _context.SaveChangesAsync();
@@ -111,6 +111,29 @@ namespace Aula_Backend.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Relatorio(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var veiculo = await _context.Veiculos.FindAsync(id);
+
+            if (veiculo == null)
+                return NotFound();
+
+            var consumos = await _context.Consumos
+                .Where(c => c.VeiculoId == id)
+                .OrderByDescending(c => c.Data)
+                .ToListAsync();
+
+            decimal total = consumos.Sum(c => c.Valor);
+
+            ViewBag.Veiculo = veiculo;
+            ViewBag.Total = total;
+
+            return View(consumos);
         }
     }
 }

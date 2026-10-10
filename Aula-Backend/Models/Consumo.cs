@@ -15,6 +15,7 @@ namespace Aula_Backend.Models
         public string Descricao { get; set; }
 
         [Required(ErrorMessage = "É obrigatório informar a data")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime Data { get; set; }
 
         [Required(ErrorMessage = "É obrigatório informar o valor")]
